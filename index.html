@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>FreshJuice AI</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      width: 350px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h2 {
+      color: #ff5e62;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+
+    button {
+      background: #ff5e62;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #e14b50;
+    }
+
+    .result-box {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .item {
+      background: #fff3f3;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    .item:hover {
+      transform: scale(1.03);
+      background: #ffe1e1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>🍹 FreshJuice AI</h2>
+
+    <p>Chọn khẩu vị:</p>
+    <select id="taste">
+      <option value="ngot">Ngọt</option>
+      <option value="chua">Chua</option>
+      <option value="thanh">Thanh mát</option>
+    </select>
+
+    <p>Mục tiêu của bạn:</p>
+    <select id="goal">
+      <option value="depda">Đẹp da</option>
+      <option value="giamcan">Giảm cân</option>
+      <option value="khang">Tăng đề kháng</option>
+      <option value="mun">Giảm mụn</option>
+      <option value="giaikhat">Giải khát</option>
+    </select>
+
+    <p>Thời điểm uống:</p>
+    <select id="time">
+      <option value="ngay">Ban ngày</option>
+      <option value="toi">Buổi tối</option>
+    </select>
+
+    <button onclick="goiY()">Xem gợi ý</button>
+
+    <div class="result-box" id="result"></div>
+  </div>
+
+  <script>
+    function goiY() {
+      let goal = document.getElementById("goal").value;
+      let time = document.getElementById("time").value;
+      let html = "";
+
+      function item(rank, text) {
+        return `<div class="item">${rank} ${text}</div>`;
+      }
+
+      if (goal === "khang") {
+        if (time === "ngay") {
+          html =
+            item("🥇", "Cam + Gừng → tăng đề kháng") +
+            item("🥈", "Cam + Cà rốt → bổ sung vitamin") +
+            item("🥉", "Dứa + Táo → thanh lọc cơ thể");
+        } else {
+          html =
+            item("🥇", "Táo + Mật ong → nhẹ nhàng buổi tối") +
+            item("🥈", "Lê + Gừng → ấm cơ thể") +
+item("🥉", "Cam + Táo → dễ uống");
+        }
+      }
+
+      else if (goal === "mun") {
+        if (time === "ngay") {
+          html =
+            item("🥇", "Dứa + Cam → giảm mụn") +
+            item("🥈", "Cà rốt + Táo → đẹp da") +
+            item("🥉", "Cam + Dưa leo → mát gan");
+        } else {
+          html =
+            item("🥇", "Dưa leo + Táo → giảm mụn ban đêm") +
+            item("🥈", "Cần tây + Táo → detox") +
+            item("🥉", "Lê + Dưa leo → dịu cơ thể");
+        }
+      }
+
+      else if (goal === "giamcan") {
+        if (time === "ngay") {
+          html =
+            item("🥇", "Chanh + Cần tây → đốt mỡ") +
+            item("🥈", "Táo + Cần tây → ít calo") +
+            item("🥉", "Dưa leo + Chanh → thanh lọc");
+        } else {
+          html =
+            item("🥇", "Cần tây + Táo → nhẹ bụng") +
+            item("🥈", "Dưa leo + Táo → ít năng lượng") +
+            item("🥉", "Lê + Cần tây → dễ tiêu");
+        }
+      }
+
+      else if (goal === "depda") {
+        html =
+          item("🥇", "Dâu + Cam → sáng da") +
+          item("🥈", "Cà rốt + Cam → vitamin A") +
+          item("🥉", "Dưa hấu + Táo → cấp nước");
+      }
+
+      else if (goal === "giaikhat") {
+        html =
+          item("🥇", "Dưa hấu + Bạc hà → giải nhiệt") +
+          item("🥈", "Cam + Dứa → tươi mát") +
+          item("🥉", "Dưa leo + Chanh → thanh lọc");
+      }
+
+      else {
+        html =
+          item("🥇", "Mix trái cây") +
+          item("🥈", "Táo + Cam") +
+          item("🥉", "Dứa + Dưa hấu");
+      }
+
+      document.getElementById("result").innerHTML = html;
+    }
+  </script>
+
+</body>
+</html>
