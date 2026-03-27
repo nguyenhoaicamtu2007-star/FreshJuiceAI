@@ -19,7 +19,7 @@
       background: white;
       padding: 30px;
       border-radius: 20px;
-      width: 350px;
+      width: 360px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       text-align: center;
     }
@@ -32,9 +32,10 @@
     p {
       margin-top: 15px;
       font-weight: bold;
+      text-align: left;
     }
 
-    select, button {
+    select, input, button {
       width: 100%;
       padding: 10px;
       margin-top: 8px;
@@ -56,134 +57,125 @@
       background: #e14b50;
     }
 
-    .result-box {
-      margin-top: 20px;
-      text-align: left;
-    }
-
     .item {
       background: #fff3f3;
       padding: 10px;
       border-radius: 10px;
       margin-top: 10px;
-      transition: 0.3s;
+      text-align: left;
     }
 
-    .item:hover {
-      transform: scale(1.03);
-      background: #ffe1e1;
+    .title-result {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: left;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
-    <h2>🍹 FreshJuice AI</h2>
+<div class="container">
+  <h2>FreshJuice AI</h2>
 
-    <p>Chọn khẩu vị:</p>
-    <select id="taste">
-      <option value="ngot">Ngọt</option>
-      <option value="chua">Chua</option>
-      <option value="thanh">Thanh mát</option>
-    </select>
+  <p>Khẩu vị</p>
+  <select id="taste">
+    <option>Ngọt</option>
+    <option>Chua</option>
+    <option>Thanh mát</option>
+  </select>
 
-    <p>Mục tiêu của bạn:</p>
-    <select id="goal">
-      <option value="depda">Đẹp da</option>
-      <option value="giamcan">Giảm cân</option>
-      <option value="khang">Tăng đề kháng</option>
-      <option value="mun">Giảm mụn</option>
-      <option value="giaikhat">Giải khát</option>
-    </select>
+  <p>Mục tiêu sức khỏe</p>
+  <select id="goal">
+    <option value="depda">Đẹp da</option>
+    <option value="giamcan">Giảm cân</option>
+    <option value="khang">Tăng đề kháng</option>
+    <option value="giaikhat">Giải khát</option>
+  </select>
 
-    <p>Thời điểm uống:</p>
-    <select id="time">
-      <option value="ngay">Ban ngày</option>
-      <option value="toi">Buổi tối</option>
-    </select>
+  <p>Thời điểm sử dụng</p>
+  <select id="time">
+    <option value="ngay">Ban ngày</option>
+    <option value="toi">Buổi tối</option>
+  </select>
 
-    <button onclick="goiY()">Xem gợi ý</button>
+  <p>Dị ứng (có thể nhập nhiều: cam, dứa...)</p>
+  <input type="text" id="allergy" placeholder="Ví dụ: cam, dứa">
 
-    <div class="result-box" id="result"></div>
-  </div>
+  <button onclick="goiY()">Gợi ý</button>
 
-  <script>
-    function goiY() {
-      let goal = document.getElementById("goal").value;
-      let time = document.getElementById("time").value;
-      let html = "";
+  <div class="title-result">Kết quả gợi ý</div>
+  <div id="result"></div>
+</div>
 
-      function item(rank, text) {
-        return `<div class="item">${rank} ${text}</div>`;
+<script>
+function goiY() {
+  let goal = document.getElementById("goal").value;
+  let time = document.getElementById("time").value;
+
+  let allergyInput = document.getElementById("allergy").value.toLowerCase();
+  let allergies = allergyInput.split(",").map(a => a.trim());
+
+  let menu = [];
+
+  function isAllowed(name) {
+    for (let a of allergies) {
+      if (a && name.toLowerCase().includes(a)) {
+        return false;
       }
-
-      if (goal === "khang") {
-        if (time === "ngay") {
-          html =
-            item("🥇", "Cam + Gừng → tăng đề kháng") +
-            item("🥈", "Cam + Cà rốt → bổ sung vitamin") +
-            item("🥉", "Dứa + Táo → thanh lọc cơ thể");
-        } else {
-          html =
-            item("🥇", "Táo + Mật ong → nhẹ nhàng buổi tối") +
-            item("🥈", "Lê + Gừng → ấm cơ thể") +
-item("🥉", "Cam + Táo → dễ uống");
-        }
-      }
-
-      else if (goal === "mun") {
-        if (time === "ngay") {
-          html =
-            item("🥇", "Dứa + Cam → giảm mụn") +
-            item("🥈", "Cà rốt + Táo → đẹp da") +
-            item("🥉", "Cam + Dưa leo → mát gan");
-        } else {
-          html =
-            item("🥇", "Dưa leo + Táo → giảm mụn ban đêm") +
-            item("🥈", "Cần tây + Táo → detox") +
-            item("🥉", "Lê + Dưa leo → dịu cơ thể");
-        }
-      }
-
-      else if (goal === "giamcan") {
-        if (time === "ngay") {
-          html =
-            item("🥇", "Chanh + Cần tây → đốt mỡ") +
-            item("🥈", "Táo + Cần tây → ít calo") +
-            item("🥉", "Dưa leo + Chanh → thanh lọc");
-        } else {
-          html =
-            item("🥇", "Cần tây + Táo → nhẹ bụng") +
-            item("🥈", "Dưa leo + Táo → ít năng lượng") +
-            item("🥉", "Lê + Cần tây → dễ tiêu");
-        }
-      }
-
-      else if (goal === "depda") {
-        html =
-          item("🥇", "Dâu + Cam → sáng da") +
-          item("🥈", "Cà rốt + Cam → vitamin A") +
-          item("🥉", "Dưa hấu + Táo → cấp nước");
-      }
-
-      else if (goal === "giaikhat") {
-        html =
-          item("🥇", "Dưa hấu + Bạc hà → giải nhiệt") +
-          item("🥈", "Cam + Dứa → tươi mát") +
-          item("🥉", "Dưa leo + Chanh → thanh lọc");
-      }
-
-      else {
-        html =
-          item("🥇", "Mix trái cây") +
-          item("🥈", "Táo + Cam") +
-          item("🥉", "Dứa + Dưa hấu");
-      }
-
-      document.getElementById("result").innerHTML = html;
     }
-  </script>
+    return true;
+  }
+
+  function add(name) {
+    if (isAllowed(name)) {
+      menu.push(name);
+    }
+  }
+
+  // Logic gợi ý
+  if (goal === "khang") {
+    add("Cam + Gừng – tăng đề kháng");
+    add("Cam + Cà rốt – bổ sung vitamin");
+    add("Dứa + Táo – thanh lọc cơ thể");
+  }
+else if (goal === "giamcan") {
+    if (time === "ngay") {
+      add("Cần tây + Chanh – hỗ trợ giảm cân");
+      add("Táo + Cần tây – ít calo");
+      add("Dưa leo + Chanh – thanh lọc");
+    } else {
+      add("Cần tây + Táo – nhẹ bụng");
+      add("Dưa leo + Táo – ít năng lượng");
+      add("Lê + Cần tây – dễ tiêu");
+    }
+  }
+
+  else if (goal === "depda") {
+    add("Dâu + Cam – sáng da");
+    add("Cà rốt + Cam – giàu vitamin A");
+    add("Dưa hấu + Táo – cấp nước");
+  }
+
+  else if (goal === "giaikhat") {
+    add("Dưa hấu + Bạc hà – giải nhiệt");
+    add("Cam + Dứa – tươi mát");
+    add("Dưa leo + Chanh – thanh lọc");
+  }
+
+  let html = "";
+
+  if (menu.length === 0) {
+    html = `<div class="item">Không có lựa chọn phù hợp do dị ứng của bạn</div>`;
+  } else {
+    menu.forEach(item => {
+      html += `<div class="item">${item}</div>`;
+    });
+  }
+
+  document.getElementById("result").innerHTML = html;
+}
+</script>
 
 </body>
 </html>
